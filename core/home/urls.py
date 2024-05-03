@@ -20,4 +20,6 @@ from . import views
 
 urlpatterns = [
     path('', views.countdown_timer, name='countdown_timer'),
+    path('add/', views.add_edit_event, name='add_event'),
+    path('edit/<int:event_id>/', views.add_edit_event, name='edit_event'),
 ]

@@ -14,7 +14,7 @@
             color: #333;
         }
         
-        #timer {
+        .timer {
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -23,60 +23,89 @@
             max-width: 300px;
         }
         
-        #countdown {
+        .countdown {
             font-size: 24px;
             font-weight: bold;
             color: #e44d26;
         }
         
-        #event {
-            font-size: 34px;
+        .event {
+            font-size: 24px;
             font-weight: bold;
             color: #221d1c;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .btn-edit {
+            background-color: #008CBA;
+            margin-right: 10px;
+        }
+        
+        .btn-delete {
+            background-color: #f44336;
         }
     </style>
 </head>
 <body>
     <h1>Event Countdown Timer</h1>
-    <div id="timer">
-        <h3 id="event">{{ data.name }}</h3>
+    {% for event in events %}
+    <div class="timer">
+        <h3 class="event">{{ event.name }}</h3>
         <h2>Time Remaining:</h2>
-        <div id="countdown">
-            {{ data.hours|stringformat:"02d" }} : {{ data.minutes|stringformat:"02d" }} : {{ data.seconds|stringformat:"02d" }}
+        <div class="countdown">
+            {{ event.hours|stringformat:"02d" }} : {{ event.minutes|stringformat:"02d" }} : {{ event.seconds|stringformat:"02d" }}
+        </div>
+        <div>
+            
+            
         </div>
     </div>
+    {% endfor %}
  
     <script>
         // Function to update the countdown timer
         function updateTimer() {
-            var hours = parseInt(document.getElementById('countdown').textContent.split(':')[0]);
-            var minutes = parseInt(document.getElementById('countdown').textContent.split(':')[1]);
-            var seconds = parseInt(document.getElementById('countdown').textContent.split(':')[2]);
- 
-            if (seconds > 0) {
-                seconds--;
-            } else {
-                if (minutes > 0) {
-                    minutes--;
-                    seconds = 59;
+            var countdowns = document.querySelectorAll('.countdown');
+            countdowns.forEach(function(countdown) {
+                var hours = parseInt(countdown.textContent.split(':')[0]);
+                var minutes = parseInt(countdown.textContent.split(':')[1]);
+                var seconds = parseInt(countdown.textContent.split(':')[2]);
+
+                if (seconds > 0) {
+                    seconds--;
                 } else {
-                    if (hours > 0) {
-                        hours--;
-                        minutes = 59;
+                    if (minutes > 0) {
+                        minutes--;
                         seconds = 59;
                     } else {
-                        // Timer has reached zero, you can handle this case as needed
+                        if (hours > 0) {
+                            hours--;
+                            minutes = 59;
+                            seconds = 59;
+                        } else {
+                            // Timer has reached zero, you can handle this case as needed
+                        }
                     }
                 }
-            }
- 
-            // Update the timer display
-            document.getElementById('countdown').textContent =
-                (hours < 10 ? '0' : '') + hours + ' : ' +
-                (minutes < 10 ? '0' : '') + minutes + ' : ' +
-                (seconds < 10 ? '0' : '') + seconds;
+
+                // Update the timer display
+                countdown.textContent =
+                    (hours < 10 ? '0' : '') + hours + ' : ' +
+                    (minutes < 10 ? '0' : '') + minutes + ' : ' +
+                    (seconds < 10 ? '0' : '') + seconds;
+            });
         }
- 
+
         // Update the timer every second
         setInterval(updateTimer, 1000);
     </script>
